@@ -66,7 +66,13 @@ export function PublishModal({ open, onClose, onPublish }: PublishModalProps) {
     }
 
     setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) return
+    if (Object.keys(nextErrors).length > 0) {
+      const firstInvalidId = nextErrors.title ? 'task-title' : 'task-description'
+      window.requestAnimationFrame(() => {
+        document.getElementById(firstInvalidId)?.focus()
+      })
+      return
+    }
 
     onPublish({
       title: form.title.trim(),

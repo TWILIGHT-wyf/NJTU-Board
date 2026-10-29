@@ -1,7 +1,7 @@
 import { Avatar } from './Avatar'
 import { Modal } from './Modal'
 import { PixelIcon } from './PixelIcon'
-import { CATEGORY_ICON, CURRENT_USER } from '../data/tasks'
+import { CATEGORY_ICON } from '../data/tasks'
 import { CATEGORY_LABELS } from '../types'
 import type { Task } from '../types'
 import { formatRelativeTime } from '../lib/time'
@@ -10,13 +10,24 @@ import { STATUS_META } from '../lib/status'
 
 interface TaskDetailProps {
   task: Task | null
+  currentUserId: string
   onClose: () => void
   onClaim: (task: Task) => void
+  onComplete: (task: Task) => void
 }
 
-export function TaskDetail({ task, onClose, onClaim }: TaskDetailProps) {
+export function TaskDetail({
+  task,
+  currentUserId,
+  onClose,
+  onClaim,
+  onComplete,
+}: TaskDetailProps) {
   const status = task ? STATUS_META[task.status] : null
-  const claimedByMe = task?.claimant?.name === CURRENT_USER.name
+  const claimedByMe = task?.claimant?.id === currentUserId
+  const isOwn = task?.author.id === currentUserId
+  const canClaim = Boolean(task && task.status === 'open' && !isOwn)
+  const canComplete = Boolean(task && task.status === 'claimed' && claimedByMe)
 
   return (
     <Modal open={Boolean(task)} onClose={onClose} labelledBy="task-detail-title">
@@ -120,18 +131,27 @@ export function TaskDetail({ task, onClose, onClaim }: TaskDetailProps) {
                 <PixelIcon name="heart" size={15} className="mt-0.5 shrink-0 text-leaf" />
                 <span>
                   {claimedByMe
-                    ? '你已认领这张委托，记得和对方约好时间地点。'
-                    : '已经有人认领，正在交接中。下次手快一点！'}
+                    ? '你已认领这张委托，记得和对方约好时间地点。完成后可以在这里标记。'
+                    : isOwn
+                      ? `你的委托已被 ${task.claimant?.name ?? '一位同学'} 认领，正在交接中。`
+                      : '已经有人认领，正在交接中。下次手快一点！'}
                 </span>
+              </div>
+            )}
+
+            {task.status === 'open' && isOwn && (
+              <div className="mt-5 flex items-start gap-3 border border-njtech/25 bg-njtech-soft/45 px-4 py-3 text-xs leading-5 text-njtech-deep">
+                <PixelIcon name="clipboard" size={15} className="mt-0.5 shrink-0" />
+                <span>这是你发布的委托，正在公告栏上等一位顺路的南工人。</span>
               </div>
             )}
           </div>
 
-          {task.status === 'open' && (
+          {canClaim && (
             <div className="sticky bottom-0 z-10 border-t-2 border-dashed border-wood-deep/20 bg-paper/95 px-5 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 backdrop-blur-sm sm:px-8 sm:pb-5">
               <button
                 type="button"
-                onClick={() => onClaim(task)}
+                onClick={() => onClaim(task!)}
                 className="pixel-btn pixel-btn-primary h-12 w-full text-sm"
               >
                 <PixelIcon name="heart" size={15} />
@@ -140,6 +160,22 @@ export function TaskDetail({ task, onClose, onClaim }: TaskDetailProps) {
               </button>
               <p className="mt-2.5 text-center text-[10px] text-ink-soft/55">
                 认领后请主动联系对方，友好沟通，量力而行。
+              </p>
+            </div>
+          )}
+
+          {canComplete && (
+            <div className="sticky bottom-0 z-10 border-t-2 border-dashed border-wood-deep/20 bg-paper/95 px-5 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 backdrop-blur-sm sm:px-8 sm:pb-5">
+              <button
+                type="button"
+                onClick={() => onComplete(task!)}
+                className="pixel-btn pixel-btn-honey h-12 w-full text-sm"
+              >
+                <PixelIcon name="check" size={16} />
+                标记为已完成
+              </button>
+              <p className="mt-2.5 text-center text-[10px] text-ink-soft/55">
+                完成后这张委托会进入「已完成」，不能再次认领。
               </p>
             </div>
           )}

@@ -47,7 +47,7 @@ export function Footer() {
 
           <div className="mt-6 flex flex-col gap-1.5 border-t border-paper/10 pt-4 text-[10px] text-paper/35 sm:flex-row sm:items-center sm:justify-between">
             <p>校园互助网页原型 · 非官方</p>
-            <p>本页委托、人物与时间均为演示数据</p>
+            <p>演示数据 · 仅保存在当前浏览器 · 尚未接入多用户协作</p>
           </div>
         </div>
       </div>

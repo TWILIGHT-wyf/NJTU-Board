@@ -13,7 +13,7 @@ export function Toast({ toast }: ToastProps) {
   if (!toast) return null
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-[82px] z-[70] flex justify-center px-4 sm:top-[98px]">
+    <div className="pointer-events-none fixed inset-x-0 top-[82px] z-[45] flex justify-center px-4 sm:top-[98px]">
       <div
         key={toast.id}
         role="status"

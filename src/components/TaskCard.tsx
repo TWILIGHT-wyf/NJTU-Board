@@ -10,13 +10,25 @@ import { STATUS_META } from '../lib/status'
 interface TaskCardProps {
   task: Task
   index: number
+  currentUserId: string
   onOpen: (task: Task) => void
   onClaim: (task: Task) => void
+  onComplete: (task: Task) => void
 }
 
-export function TaskCard({ task, index, onOpen, onClaim }: TaskCardProps) {
+export function TaskCard({
+  task,
+  index,
+  currentUserId,
+  onOpen,
+  onClaim,
+  onComplete,
+}: TaskCardProps) {
   const status = STATUS_META[task.status]
-  const isOpen = task.status === 'open'
+  const isOwn = task.author.id === currentUserId
+  const isClaimedByMe = task.claimant?.id === currentUserId
+  const canClaim = task.status === 'open' && !isOwn
+  const canComplete = task.status === 'claimed' && isClaimedByMe
   const seed = [...task.id].reduce((sum, character) => sum + character.charCodeAt(0), 0)
   const variant = seed % 4
   const tapeStyle = TAPE_STYLES[seed % TAPE_STYLES.length]
@@ -124,12 +136,18 @@ export function TaskCard({ task, index, onOpen, onClaim }: TaskCardProps) {
           <div className="min-w-0">
             <p className="truncate text-[11px] font-bold text-ink/90">{task.author.name}</p>
             <p className="text-[10px] tracking-wide text-ink-soft/50">
-              {task.status === 'done' ? '这件事已经办妥' : '贴的告示'}
+              {task.status === 'done'
+                ? '这件事已经办妥'
+                : isOwn
+                  ? '你贴的告示'
+                  : isClaimedByMe
+                    ? '你认领的委托'
+                    : '贴的告示'}
             </p>
           </div>
 
           <div className="ml-auto shrink-0 pointer-events-auto">
-            {isOpen ? (
+            {canClaim ? (
               <button
                 type="button"
                 onClick={(event) => {
@@ -142,6 +160,24 @@ export function TaskCard({ task, index, onOpen, onClaim }: TaskCardProps) {
                 认领
                 <PixelIcon name="arrow" size={12} />
               </button>
+            ) : canComplete ? (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  onComplete(task)
+                }}
+                className="pixel-btn pixel-btn-honey h-8 px-3 text-xs"
+                aria-label={`完成委托：${task.title}`}
+              >
+                完成
+                <PixelIcon name="check" size={12} />
+              </button>
+            ) : task.status === 'open' && isOwn ? (
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-njtech-deep/65">
+                <PixelIcon name="clipboard" size={11} />
+                我发布的
+              </span>
             ) : (
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-ink-soft/55">
                 {task.status === 'done' ? (

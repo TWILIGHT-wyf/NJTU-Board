@@ -1,13 +1,18 @@
 import { Avatar } from './Avatar'
 import { BrandMark } from './BrandMark'
 import { PixelIcon } from './PixelIcon'
+import { CURRENT_USER } from '../data/tasks'
+import type { BoardView } from '../types'
 
 interface HeaderProps {
+  view: BoardView
+  onHome: () => void
+  onMine: () => void
   onPublish: () => void
   onProfile: () => void
 }
 
-export function Header({ onPublish, onProfile }: HeaderProps) {
+export function Header({ view, onHome, onMine, onPublish, onProfile }: HeaderProps) {
   const hour = new Date().getHours()
   const greeting =
     hour < 5 ? '夜深了，' : hour < 11 ? '早上好，' : hour < 14 ? '中午好，' : hour < 18 ? '下午好，' : '晚上好，'
@@ -19,8 +24,13 @@ export function Header({ onPublish, onProfile }: HeaderProps) {
         <div className="mx-auto flex h-[68px] max-w-6xl items-center gap-3 px-4 sm:h-[76px] sm:px-6">
           <a
             href="#home"
+            onClick={(event) => {
+              event.preventDefault()
+              onHome()
+            }}
             className="flex items-center gap-3 rounded-sm focus-visible:outline-clay"
             aria-label="南工告示板首页"
+            aria-current={view === 'home' ? 'page' : undefined}
           >
             <BrandMark size={46} />
             <span className="block min-w-0">
@@ -42,6 +52,23 @@ export function Header({ onPublish, onProfile }: HeaderProps) {
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <button
               type="button"
+              onClick={onMine}
+              aria-current={view === 'mine' ? 'page' : undefined}
+              className={`hidden h-10 items-center gap-1.5 border-2 px-3 text-xs font-bold transition-colors md:inline-flex ${
+                view === 'mine'
+                  ? 'border-wood-deep bg-pine text-paper shadow-[2px_2px_0_0_#5b3e2b]'
+                  : 'border-wood-deep/20 bg-paper text-ink-soft hover:border-wood-deep/40 hover:bg-sage/30 hover:text-pine'
+              }`}
+            >
+              <PixelIcon
+                name="clipboard"
+                size={13}
+                className={view === 'mine' ? 'text-honey' : 'text-leaf/80'}
+              />
+              我的委托
+            </button>
+            <button
+              type="button"
               onClick={onPublish}
               className="pixel-btn pixel-btn-honey hidden h-10 px-4 text-sm md:inline-flex"
             >
@@ -55,10 +82,10 @@ export function Header({ onPublish, onProfile }: HeaderProps) {
               className="group flex items-center gap-2.5 rounded-sm border-2 border-transparent p-1 transition-colors hover:border-wood-deep/20 hover:bg-cream/80"
               aria-label="打开个人主页"
             >
-              <Avatar variant="chestnut" size={35} className="rounded-[2px] transition-transform group-hover:-rotate-2" />
+              <Avatar variant={CURRENT_USER.avatar} size={35} className="rounded-[2px] transition-transform group-hover:-rotate-2" />
               <span className="hidden text-left sm:block">
                 <span className="block text-[10px] leading-tight text-ink-soft/75">{greeting}</span>
-                <span className="block text-sm font-bold leading-tight text-ink">阿栗</span>
+                <span className="block text-sm font-bold leading-tight text-ink">{CURRENT_USER.name}</span>
               </span>
               <PixelIcon
                 name="sparkle"

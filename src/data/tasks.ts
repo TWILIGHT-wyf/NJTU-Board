@@ -2,9 +2,9 @@ import type { AvatarVariant, Category, Person, Task } from '../types'
 
 const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * 60_000).toISOString()
 
-const person = (name: string, avatar: AvatarVariant): Person => ({ name, avatar })
+const person = (id: string, name: string, avatar: AvatarVariant): Person => ({ id, name, avatar })
 
-export const CURRENT_USER = person('阿栗', 'chestnut')
+export const CURRENT_USER = person('user-a-li', '阿栗', 'chestnut')
 
 /**
  * 演示数据：人物、委托与联系方式均为虚构，仅用于原型展示。
@@ -20,7 +20,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(18),
     location: '明德楼 3 楼',
     reward: '一杯热奶茶',
-    author: person('小满', 'sprout'),
+    author: person('user-xiaoman', '小满', 'sprout'),
   },
   {
     id: 'notice-02',
@@ -32,7 +32,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(34),
     location: '逸夫图书馆 4 楼',
     reward: '请你喝贩卖机热美式',
-    author: person('青柠', 'peach'),
+    author: person('user-qingning', '青柠', 'peach'),
   },
   {
     id: 'notice-03',
@@ -44,7 +44,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(56),
     location: '江浦体育馆',
     reward: '场地我订好了，人来就行',
-    author: person('阿北', 'bean'),
+    author: person('user-abei', '阿北', 'bean'),
   },
   {
     id: 'notice-04',
@@ -56,7 +56,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(88),
     location: '浦江苑 7 栋',
     reward: '两个橘子',
-    author: person('土豆', 'cloud'),
+    author: person('user-tudou', '土豆', 'cloud'),
   },
   {
     id: 'notice-05',
@@ -68,7 +68,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(125),
     location: '厚学楼 / 线上',
     reward: '请你喝瑞幸',
-    author: person('小树', 'pear'),
+    author: person('user-xiaoshu', '小树', 'pear'),
   },
   {
     id: 'notice-06',
@@ -80,7 +80,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(180),
     location: '东苑食堂门口',
     reward: '20 元，可小刀',
-    author: person('栗子', 'cloud'),
+    author: person('user-lizi', '栗子', 'cloud'),
   },
   {
     id: 'notice-07',
@@ -92,7 +92,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(245),
     location: '大学生活动中心',
     reward: '票免费，再请你喝酸奶',
-    author: person('团团', 'peach'),
+    author: CURRENT_USER,
   },
   {
     id: 'notice-08',
@@ -104,7 +104,7 @@ export const INITIAL_TASKS: Task[] = [
     createdAt: minutesAgo(1440),
     location: '浦江苑 6 栋',
     reward: '两根冰棍',
-    author: person('秋刀鱼', 'sprout'),
+    author: person('user-qiudao', '秋刀鱼', 'sprout'),
     claimant: CURRENT_USER,
   },
 ]

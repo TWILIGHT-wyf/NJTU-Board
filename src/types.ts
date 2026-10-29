@@ -2,8 +2,11 @@ export type Category = 'help' | 'partner' | 'borrow' | 'idle' | 'other'
 export type CategoryFilter = 'all' | Category
 export type TaskStatus = 'open' | 'claimed' | 'done'
 export type AvatarVariant = 'chestnut' | 'sprout' | 'pear' | 'peach' | 'cloud' | 'bean'
+export type BoardView = 'home' | 'mine'
+export type MyTaskTab = 'posted' | 'claimed'
 
 export interface Person {
+  id: string
   name: string
   avatar: AvatarVariant
 }

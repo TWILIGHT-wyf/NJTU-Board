@@ -1,5 +1,6 @@
 import { PixelIcon } from './PixelIcon'
 import type { IconName } from './PixelIcon'
+import type { BoardView } from '../types'
 
 export type NavKey = 'home' | 'mine' | 'profile'
 
@@ -10,10 +11,11 @@ const NAV_ITEMS: { key: NavKey; label: string; icon: IconName }[] = [
 ]
 
 interface BottomNavProps {
+  activeView: BoardView
   onNavigate: (key: NavKey) => void
 }
 
-export function BottomNav({ onNavigate }: BottomNavProps) {
+export function BottomNav({ activeView, onNavigate }: BottomNavProps) {
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-40 md:hidden"
@@ -22,7 +24,7 @@ export function BottomNav({ onNavigate }: BottomNavProps) {
       <div className="wood-grain border-t-[3px] border-wood-deep px-3 pb-[calc(0.4rem+env(safe-area-inset-bottom))] pt-1.5 shadow-[0_-8px_24px_rgba(60,43,29,0.18)]">
         <div className="mx-auto flex max-w-sm items-stretch gap-1">
           {NAV_ITEMS.map((item) => {
-            const active = item.key === 'home'
+            const active = item.key === activeView
             return (
               <button
                 key={item.key}
