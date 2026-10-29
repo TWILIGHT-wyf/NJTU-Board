@@ -1,0 +1,41 @@
+interface BrandMarkProps {
+  size?: number
+  className?: string
+}
+
+/**
+ * Original NJTech-inspired campus noticeboard mark.
+ * A simple shield + pinned note silhouette, not the university's official emblem.
+ */
+export function BrandMark({ size = 46, className = '' }: BrandMarkProps) {
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center justify-center drop-shadow-[3px_3px_0_rgba(70,50,36,0.24)] ${className}`}
+      style={{ width: size, height: size }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 32 32" width="100%" height="100%" shapeRendering="crispEdges">
+        {/* shield silhouette */}
+        <path d="M3 2H29V17L27 21L23 25L16 30L9 25L5 21L3 17Z" fill="#5b3e2b" />
+        <path d="M5 4H27V17L25 20L22 23L16 27.5L10 23L7 20L5 17Z" fill="#f7ecd8" />
+        <path d="M7 6H25V17L23 19.5L20.5 22L16 25.5L11.5 22L9 19.5L7 17Z" fill="#244b37" />
+
+        {/* pinned notice */}
+        <rect x="10" y="8" width="12" height="12" fill="#6b4a33" />
+        <rect x="11" y="9" width="10" height="10" fill="#fff7e4" />
+        <rect x="13" y="11" width="6" height="2" fill="#d8a84e" />
+        <rect x="13" y="15" width="5" height="1" fill="#a9bd8c" />
+        <rect x="13" y="17" width="3" height="1" fill="#c1caae" />
+
+        {/* NJTech blue pin + tiny leaf */}
+        <rect x="15" y="6" width="2" height="3" fill="#0093dd" />
+        <rect x="15" y="9" width="2" height="1" fill="#00638b" />
+        <rect x="22" y="7" width="2" height="1" fill="#8faa72" />
+        <rect x="23" y="8" width="1" height="2" fill="#8faa72" />
+
+        {/* grounding highlight */}
+        <path d="M9 23L16 27.5L23 23L22 25L16 29L10 25Z" fill="#5b3e2b" />
+      </svg>
+    </span>
+  )
+}
